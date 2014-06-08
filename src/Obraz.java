@@ -1,8 +1,6 @@
-import java.awt.Color;
-import java.awt.FlowLayout;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -12,13 +10,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.TransferHandler;
 
 
 public class Obraz extends JPanel implements MouseListener, MouseMotionListener {
+
 
 	private BufferedImage obraz;
 	private int szerokosc;
@@ -26,24 +22,45 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	
 	private ArrayList<Marker> markery=null;
 	int nrMarkera;
-	int nrPanelu;
 	
 	Stereowizja stereowizja;
 	
 	Marker przesowany=null;
 	
-	public Obraz(Stereowizja stereowizja, int nrPanelu){
+	public Obraz(Stereowizja stereowizja){
 		super();
 		this.stereowizja=stereowizja;
-		wysokosc=400;
-		szerokosc=400;
-		this.setSize(10,10);
+		wysokosc=0;
+		szerokosc=0;
 		nrMarkera=0;
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
 		
-		
+	public int getSzerokosc() {
+		return szerokosc;
+	}
+
+	public int getWysokosc() {
+		return wysokosc;
+	}
+
+	public void resetujObraz(){
+		obraz= null;
+		markery=null;
+		nrMarkera=0;
+		zmienRozmiar(0, 0);
+		repaint();	
+	}
+	
+	public void zmienRozmiar(int wys, int szer){
+		wysokosc=wys;
+		szerokosc=szer;
 	}
 	
 	public void wczytajZpliku (File plikObrazu) {
+		wysokosc=400;
+		szerokosc=400;
 		try{
 			obraz = ImageIO.read(plikObrazu);
 			wysokosc=(obraz.getHeight()<wysokosc?obraz.getHeight():wysokosc); // skalowanie obrazka jak wiekszy to zmniejszamy
@@ -53,9 +70,8 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 			System.out.println("bl¹d poddczas wczytywania");
 		}
 		markery= new ArrayList<Marker>();
-		addMouseListener(this);
-		addMouseMotionListener(this);
 	}
+
 	// malowanie funkcja wywolywana poptrzez repaint()
 	public void paint(Graphics g){
 		super.paintComponent(g);

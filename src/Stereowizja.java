@@ -1,5 +1,6 @@
+
 import java.awt.EventQueue;
-import java.awt.Label;
+import java.awt.Point;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -12,10 +13,8 @@ import java.io.File;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
-import javax.swing.JSlider;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -24,14 +23,13 @@ import javax.swing.JLabel;
 
 
 public class Stereowizja {
-	
-	
+	 
 	private JFrame frame;
 	final JFileChooser fc= new JFileChooser();
 	Obraz obraz1;// panel zawierajacy pierwszy obrazek +markery
 	Obraz obraz2;// panel zawierajacy drogi obrazek + markery
 	private final JButton btnPrzekszta = new JButton("Przekszta\u0142\u0107");
-	JLabel pozycja = new JLabel("pozycja punktu nad ktorym jest myszek w 2d a pozniej w 3d");
+	JLabel pozycja = new JLabel("");
 	
 	/**
 	 * Launch the application.
@@ -61,8 +59,8 @@ public class Stereowizja {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		obraz1=new Obraz(this,1);
-		obraz2=new Obraz(this,2);
+		obraz1=new Obraz(this);
+		obraz2=new Obraz(this);
 		//zeby nie wczytywac cay czas to mozna odblokowac i wpisac sciezke do pliku
 		//File f= new File("D:\\Dokumenty\\gra\\gra1.png");
 		//obraz1.wczytajZpliku(f);
@@ -145,10 +143,26 @@ public class Stereowizja {
 		
 		mntmWczytajObrazy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(otworzOknoDialogowe(obraz1))
+				if(obraz1.getWysokosc() == 0)
+					otworzOknoDialogowe(obraz1);
+				if(obraz1.getWysokosc() !=0 )
 					otworzOknoDialogowe(obraz2);
+				int wysokosc= (obraz1.getWysokosc()>obraz2.getWysokosc()?obraz1.getWysokosc():obraz2.getWysokosc());
+				int szerokosc= (obraz1.getSzerokosc()>obraz2.getSzerokosc()?obraz1.getSzerokosc():obraz2.getSzerokosc());
+				obraz1.zmienRozmiar(wysokosc, szerokosc);
+				obraz2.zmienRozmiar(wysokosc, szerokosc);
 			}
 		});
+		
+		mntmResetuj.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				obraz1.resetujObraz();
+				obraz2.resetujObraz();
+				pozycja.setText("");
+			}
+		});
+		
 		mntmZakocz.addActionListener(new ActionListener() {
 			
 			@Override
@@ -192,7 +206,6 @@ public class Stereowizja {
 	 */
 	private boolean otworzOknoDialogowe(Obraz panel){
 		int wartosc= fc.showOpenDialog(frame);
-		
 		if(wartosc == JFileChooser.APPROVE_OPTION){
 			File plik = fc.getSelectedFile();
 			plik.getPath().toLowerCase();
