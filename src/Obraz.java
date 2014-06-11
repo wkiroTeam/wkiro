@@ -71,7 +71,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 			szerokosc=(obraz.getWidth()<szerokosc?obraz.getWidth():szerokosc);
 		}
 		catch (IOException ex){
-			System.out.println("blπd poddczas wczytywania");
+			System.out.println("blÔøΩd poddczas wczytywania");
 		}
 		markery= new ArrayList<Marker>();
 	}
@@ -124,6 +124,11 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		if( mark!=null)
 			markery.remove(mark);
+		repaint();
+	}
+	
+	public void wyczyscListeMarkerow() {
+		markery.clear();
 		repaint();
 	}
 	
@@ -239,14 +244,20 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 			przesowany.setX(arg0.getX());
 			przesowany.setY(arg0.getY());
 			stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
-			//repaint();
+			repaint();
 		}
 	}
 	//KONIEC KODU DO PRZESOWANIA
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
+		// zakomentowane bo obraz migota≈Ç
+		// stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
 		
 	}
+
+	public ArrayList<Marker> getMarkery() {
+		return markery;
+	}
+	
 }

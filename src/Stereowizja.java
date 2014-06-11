@@ -5,11 +5,15 @@ import java.awt.Point;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
+
+
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -21,7 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.sun.javafx.scene.layout.region.Margins.Converter;
+import Jama.Matrix;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -33,12 +38,14 @@ public class Stereowizja {
 	final JFileChooser fc= new JFileChooser();
 	Obraz obraz1;// panel zawierajacy pierwszy obrazek +markery
 	Obraz obraz2;// panel zawierajacy drogi obrazek + markery
-	private final JButton btnPrzekszta = new JButton("Przekszta\u0142\u0107");
-	JLabel pozycja= new JLabel("vc");
+	private final JButton btnPrzekszta = new JButton("Kalibruj");
+	JLabel pozycja= new JLabel("");
 	private JTextField txtX;
 	private JTextField txtY;
 	private JTextField txtZ;
 	private JLabel lbMarker;
+	Przetwornik przetwornik = new Przetwornik();
+	boolean skalibrowany = false;
 	
 	/**
 	 * Launch the application.
@@ -70,10 +77,10 @@ public class Stereowizja {
 		frame = new JFrame();
 
 		//zeby nie wczytywac cay czas to mozna odblokowac i wpisac sciezke do pliku
-		File f= new File("D:\\Dokumenty\\gra\\gra1.png");
+		//File f= new File("/home/michal/Pulpit/1.png");
 		//
 		/**
-		 * Ustawianie wygl�du �eby sie w kupie trzymalo, latwo moze sie rozdupcyc
+		 * Ustawianie wygl�du �eby sie w kupie trzymalo, latwo moze sie rozdupcyc
 		 */
 
 		frame.setBounds(100, 100, 410, 227);
@@ -95,12 +102,12 @@ public class Stereowizja {
 		lbMarker = new JLabel();
 		lbMarker.setSize(10, 10);
 		obraz2=new Obraz(this);
-		obraz2.wczytajZpliku(f);
+		//obraz2.wczytajZpliku(f);
 		
 		obraz2.setBorder(UIManager.getBorder("PopupMenu.border"));
 		obraz2.setLayout(new BorderLayout(0, 0));
 		obraz1=new Obraz(this);
-		obraz1.wczytajZpliku(f);
+		//obraz1.wczytajZpliku(f);
 		GroupLayout groupLayout_1 = new GroupLayout(obraz1);
 		groupLayout_1.setHorizontalGroup(
 			groupLayout_1.createParallelGroup(Alignment.LEADING)
@@ -203,6 +210,11 @@ public class Stereowizja {
 				obraz1.resetujObraz();
 				obraz2.resetujObraz();
 				pozycja.setText("");
+				btnPrzekszta.setText("Kalibruj");
+				skalibrowany = false;
+				txtX.show(true);
+				txtY.show(true);
+				txtZ.show(true);
 			}
 		});
 		
@@ -223,8 +235,23 @@ public class Stereowizja {
 				if (nr!=-1){
 					dodajWspolrzedne3D(nr);
 				}
-				// TODO-zrobienia trzeba pobrac wartosci z listMarkerow z Obrazkow zrobic na nich operacje i costam jeszcze
 				
+				if (!skalibrowany) {
+					if (kalibruj()) {
+	
+						obraz1.wyczyscListeMarkerow();
+						obraz2.wyczyscListeMarkerow();
+						txtX.show(false);
+						txtY.show(false);
+						txtZ.show(false);
+						skalibrowany = true;
+						btnPrzekszta.setText("Oblicz współrzędne");
+						
+					}
+				} else {
+					// TODO oddzielić
+					obliczWspolrzedne();
+				}
 			}
 
 	
@@ -238,8 +265,15 @@ public class Stereowizja {
 	}
 	
 	public boolean dodawanieMarkeraDoPanelow(int x, int y){
+		if (!skalibrowany || skalibrowany && obraz1.getMarkery().size() == 0) {
 			obraz1.dodajMarker(x, y);
 			obraz2.dodajMarker(x, y);
+			
+			if (!skalibrowany) {
+				txtX.grabFocus();
+			}
+		}
+
 		return true;
 	}
 	
@@ -292,5 +326,62 @@ public class Stereowizja {
 			}
 		}
 		return false;
+	}
+	
+	private boolean kalibruj() {
+		Matrix x1, x2, X;
+		
+		ArrayList<Marker> markery1 = obraz1.getMarkery();
+		ArrayList<Marker> markery2 = obraz2.getMarkery();
+		
+		int n = Math.min(markery1.size(), markery2.size());
+		
+		double[][] tempX1 = new double[n][2];
+		for( int i = 0; i < n; ++i) {
+			tempX1[i][0] = markery1.get(i).getX();
+			tempX1[i][1] = markery1.get(i).getY();
+		}
+
+		double[][] tempX2 = new double[n][2];
+		for( int i = 0; i < n; ++i) {
+			tempX2[i][0] = markery2.get(i).getX();
+			tempX2[i][1] = markery2.get(i).getY();
+		}
+
+		double[][] tempX = new double[n][3];
+		for( int i = 0; i < n; ++i) {
+			tempX[i][0] = markery1.get(i).X3d;
+			tempX[i][1] = markery1.get(i).Y3d;
+			tempX[i][2] = markery1.get(i).Z3d;
+		}
+		
+		x1 = new Matrix(tempX1);
+		x2 = new Matrix(tempX2);
+		X = new Matrix(tempX);
+
+		przetwornik.skalibruj(x1, x2, X);
+		
+		return true;
+	}
+	
+	private Matrix obliczWspolrzedne() {
+		
+		Matrix xt1, xt2;
+		
+		double[][] tempXt1 = {
+				{obraz1.getMarkery().get(0).getX()},{obraz1.getMarkery().get(0).getY()}
+		};
+		
+		double[][] tempXt2 = {
+				{obraz2.getMarkery().get(0).getX()},{obraz2.getMarkery().get(0).getY()}
+		};
+		
+		
+		xt1 = new Matrix(tempXt1);
+		xt2 = new Matrix(tempXt2);
+		Matrix result = przetwornik.rekonstruuj(xt1, xt2);
+		
+		pozycja.setText("X:" + result.get(0, 0) + ", Y:"+ result.get(1, 0) + ", Z:" + result.get(2, 0));
+		return result;
 	}
 }
