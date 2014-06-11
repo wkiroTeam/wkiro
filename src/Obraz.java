@@ -48,6 +48,16 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	public int getWysokosc() {
 		return wysokosc;
 	}
+	
+	public void setZaznaczony(int nr){
+		for(Marker m: markery){
+			if(m.getNr()==nr){
+				zaznaczony=m;
+				break;
+			}
+		}
+		repaint();
+	}
 
 	public void resetujObraz(){
 		obraz= null;
@@ -75,17 +85,6 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		markery= new ArrayList<Marker>();
 	}
-	/*public void update(Graphics g){
-		Dimension rozmiar= this.getSize();
-		if(obraz!=null){
-			Graphics g2d= obraz.getGraphics();
-			paint(g2d);
-			g2d.dispose();
-			g2d.drawImage(obraz, 0,0,szerokosc,wysokosc, this);
-		}
-	}*/
-	
-	
 
 	// malowanie funkcja wywolywana poptrzez repaint()
 	public void paint(Graphics g){
@@ -99,14 +98,13 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 			for(Marker m : markery){
 				m.draw(g2d);
 			}
-		}		
+		}
+		if (zaznaczony!= null){
+			zaznaczony.drawCircle(g2d);
+		}
 	}
 	
 	public void dodajMarker( int x, int y){
-		if(zaznaczony!=null){
-			stereowizja.dodajWspolrzedne3D(zaznaczony.getNr());
-		}
-		stereowizja.wyczyscTxtXYZ();
 		Marker m =new Marker(nrMarkera,x,y);
 		markery.add(m);
 		nrMarkera++;
@@ -191,7 +189,8 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		//DODAWANIE MARKERU- prawym myszkiem
 		if (arg0.getButton() == MouseEvent.BUTTON3) {
 			if (markery.isEmpty()) {
-				stereowizja.dodawanieMarkeraDoPanelow(mX, mY);
+				int nr=(zaznaczony!=null?zaznaczony.getNr():-1); // formalnie zawsze powinno byc null na poczatku ale na wszelki wypadek...
+				stereowizja.dodawanieMarkeraDoPanelow(mX, mY, nr);
 				repaint();
 			} else {
 				boolean dodaj=false;
@@ -203,7 +202,8 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 					}
 				}
 				if(dodaj){
-					stereowizja.dodawanieMarkeraDoPanelow(mX, mY);
+					int nr=(zaznaczony!=null?zaznaczony.getNr():-1);
+					stereowizja.dodawanieMarkeraDoPanelow(mX, mY, nr);
 				}
 			}
 		}
@@ -252,7 +252,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// zakomentowane bo obraz migotał
-		// stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
+		 stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
 		
 	}
 

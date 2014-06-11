@@ -67,5 +67,10 @@ public class Marker  {
 		g2d.drawLine(x+1, y-rozmiar, x+1, y+rozmiar);
 
 	}
+	public void drawCircle(Graphics2D g2d){ // malowanie kolka
+		g2d.setColor(kolor);
+		g2d.drawOval(x-rozmiar, y-rozmiar, 2*rozmiar, 2*rozmiar);
+
+	}
 			
 }

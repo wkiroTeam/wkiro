@@ -1,4 +1,5 @@
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Point;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.JMenuBar;
@@ -34,7 +36,7 @@ import java.awt.FlowLayout;
 
 public class Stereowizja {
 	 
-	private JFrame frame;
+	private JFrame frmStereopara;
 	final JFileChooser fc= new JFileChooser();
 	Obraz obraz1;// panel zawierajacy pierwszy obrazek +markery
 	Obraz obraz2;// panel zawierajacy drogi obrazek + markery
@@ -44,6 +46,7 @@ public class Stereowizja {
 	private JTextField txtY;
 	private JTextField txtZ;
 	private JLabel lbMarker;
+	private JPanel opcje;
 	Przetwornik przetwornik = new Przetwornik();
 	boolean skalibrowany = false;
 	
@@ -55,7 +58,7 @@ public class Stereowizja {
 			public void run() {
 				try {
 					Stereowizja window = new Stereowizja();
-					window.frame.setVisible(true);
+					window.frmStereopara.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -74,104 +77,92 @@ public class Stereowizja {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-
+		frmStereopara = new JFrame();
+		frmStereopara.setTitle("Stereopara");
+		
+		obraz1 = new Obraz(this);
+		obraz2 = new Obraz(this);
+		obraz1.setPreferredSize(new Dimension(400,400));
+		obraz2.setPreferredSize(new Dimension(400,400));
+		
 		//zeby nie wczytywac cay czas to mozna odblokowac i wpisac sciezke do pliku
-		//File f= new File("/home/michal/Pulpit/1.png");
+
+		//File f= new File("D:\\Dokumenty\\gra\\gra1.png");
+		//obraz1.wczytajZpliku(f);
+		//obraz2.wczytajZpliku(f);
 		//
 		/**
 		 * Ustawianie wygl�du �eby sie w kupie trzymalo, latwo moze sie rozdupcyc
 		 */
 
-		frame.setBounds(100, 100, 410, 227);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmStereopara.setBounds(100, 100, 303, 134);
+		frmStereopara.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		opcje = new JPanel();
+		opcje.setLayout(null);
 		
+		btnPrzekszta.setBounds(3, 10, 87, 23);
+		opcje.add(btnPrzekszta);
+
 		txtX = new JTextField();
+		txtX.setBounds(100, 11, 30, 20);
+		opcje.add(txtX);
 		txtX.setText("X");
 		txtX.setColumns(10);
 		
 		txtY = new JTextField();
+		txtY.setBounds(140, 12, 30, 20);
+		opcje.add(txtY);
 		txtY.setText("Y");
 		txtY.setColumns(10);
 		
 		txtZ = new JTextField();
+		txtZ.setBounds(180, 12, 30, 20);
+		opcje.add(txtZ);
 		txtZ.setText("Z");
 		txtZ.setColumns(10);
 		
-		lbMarker = new JLabel();
-		lbMarker.setSize(10, 10);
-		obraz2=new Obraz(this);
-		//obraz2.wczytajZpliku(f);
+		btnPrzekszta.setText("Kalibruj");
+		skalibrowany = false;
+		txtX.show(true);
+		txtY.show(true);
+		txtZ.show(true);
+
 		
-		obraz2.setBorder(UIManager.getBorder("PopupMenu.border"));
-		obraz2.setLayout(new BorderLayout(0, 0));
-		obraz1=new Obraz(this);
-		//obraz1.wczytajZpliku(f);
-		GroupLayout groupLayout_1 = new GroupLayout(obraz1);
-		groupLayout_1.setHorizontalGroup(
-			groupLayout_1.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 398, Short.MAX_VALUE)
+
+		pozycja.setBounds(220, 12, 400, 20);
+		opcje.add(pozycja);
+		
+		GroupLayout groupLayout = new GroupLayout(frmStereopara.getContentPane());
+		groupLayout.setHorizontalGroup(groupLayout
+			.createParallelGroup(Alignment.LEADING)
+			.addComponent(opcje, GroupLayout.PREFERRED_SIZE, 400,GroupLayout.PREFERRED_SIZE)
+				.addGroup(groupLayout
+					.createSequentialGroup()
+						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE, 400,GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE, 400,GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(28, Short.MAX_VALUE))
+
 		);
-		groupLayout_1.setVerticalGroup(
-			groupLayout_1.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 413, Short.MAX_VALUE)
+		groupLayout.setVerticalGroup(groupLayout
+			.createParallelGroup(Alignment.LEADING)
+			.addGroup(groupLayout
+				.createSequentialGroup()
+					.addComponent(opcje,GroupLayout.PREFERRED_SIZE, 38,GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE,400,GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE,400,GroupLayout.PREFERRED_SIZE))
+							.addGap(40))
 		);
-		obraz1.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
-		obraz1.setLayout(groupLayout_1);
-		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
-							.addGap(300)
-							.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(9)
-							.addComponent(btnPrzekszta)
-							.addGap(5)
-							.addComponent(txtX, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(txtY, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(txtZ, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(5)
-							.addComponent(pozycja)))
-					.addContainerGap(9, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(5)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnPrzekszta)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(1)
-							.addComponent(txtX, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(1)
-							.addComponent(txtY, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(1)
-							.addComponent(txtZ, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(4)
-							.addComponent(pozycja)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-						.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
-					.addGap(195))
-		);
-		frame.getContentPane().setLayout(groupLayout);
+		frmStereopara.getContentPane().setLayout(groupLayout);
 		/**
 		 * MENU
 		 */
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		frmStereopara.setJMenuBar(menuBar);
 		
 		JMenu mnPlik = new JMenu("Plik");
 		mnPlik.setMnemonic(KeyEvent.VK_P);
@@ -222,7 +213,7 @@ public class Stereowizja {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			frame.setVisible(false);
+				frmStereopara.setVisible(false);
 				
 			}
 		});
@@ -264,16 +255,18 @@ public class Stereowizja {
 		return true;
 	}
 	
-	public boolean dodawanieMarkeraDoPanelow(int x, int y){
+	public boolean dodawanieMarkeraDoPanelow(int x, int y, int nr){
 		if (!skalibrowany || skalibrowany && obraz1.getMarkery().size() == 0) {
 			obraz1.dodajMarker(x, y);
 			obraz2.dodajMarker(x, y);
-			
+			if(nr!=-1){
+				dodajWspolrzedne3D(nr);
+			}
 			if (!skalibrowany) {
 				txtX.grabFocus();
 			}
 		}
-
+		wyczyscTxtXYZ();
 		return true;
 	}
 	
@@ -291,6 +284,11 @@ public class Stereowizja {
 			obraz1.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );
 			obraz2.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );
 		}
+	}
+	
+	public void oznaczZaznaczonyMarker(int nr){
+		obraz1.setZaznaczony(nr);
+		obraz2.setZaznaczony(nr);
 	}
 	
 	public void tekstLabelki(int x, int y){
@@ -315,13 +313,13 @@ public class Stereowizja {
 	 * @return zwraca bul czy sie dobrze wczytalo, jak nie to okienko wczytywania 2 obrazka sie nie wyswietli- pacz mntmWczytajObrazy.addActionListener
 	 */
 	private boolean otworzOknoDialogowe(Obraz panel){
-		int wartosc= fc.showOpenDialog(frame);
+		int wartosc= fc.showOpenDialog(frmStereopara);
 		if(wartosc == JFileChooser.APPROVE_OPTION){
 			File plik = fc.getSelectedFile();
 			plik.getPath().toLowerCase();
 			if(plik.getPath().endsWith(".jpg") || plik.getPath().endsWith(".png") ){
 				panel.wczytajZpliku(plik);
-				frame.pack();
+				frmStereopara.pack();
 				return true;
 			}
 		}
