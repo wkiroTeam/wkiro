@@ -73,8 +73,8 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	}
 	
 	public void wczytajZpliku (File plikObrazu) {
-		wysokosc=400;
-		szerokosc=400;
+		wysokosc=600;
+		szerokosc=600;
 		try{
 			obraz = ImageIO.read(plikObrazu);
 			wysokosc=(obraz.getHeight()<wysokosc?obraz.getHeight():wysokosc); // skalowanie obrazka jak wiekszy to zmniejszamy
@@ -243,7 +243,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		if(przesowany !=null){
 			przesowany.setX(arg0.getX());
 			przesowany.setY(arg0.getY());
-			stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
+			//stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
 			repaint();
 		}
 	}
@@ -252,7 +252,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// zakomentowane bo obraz migotał
-		 stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
+		// stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
 		
 	}
 

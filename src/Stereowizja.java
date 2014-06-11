@@ -14,12 +14,14 @@ import java.io.File;
 
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -31,8 +33,6 @@ import Jama.Matrix;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-
-
 
 public class Stereowizja {
 	 
@@ -82,8 +82,8 @@ public class Stereowizja {
 		
 		obraz1 = new Obraz(this);
 		obraz2 = new Obraz(this);
-		obraz1.setPreferredSize(new Dimension(400,400));
-		obraz2.setPreferredSize(new Dimension(400,400));
+		obraz1.setPreferredSize(new Dimension(600,600));
+		obraz2.setPreferredSize(new Dimension(600,600));
 		
 		//zeby nie wczytywac cay czas to mozna odblokowac i wpisac sciezke do pliku
 
@@ -130,18 +130,18 @@ public class Stereowizja {
 
 		
 
-		pozycja.setBounds(220, 12, 400, 20);
+		pozycja.setBounds(220, 12, 600, 20);
 		opcje.add(pozycja);
 		
 		GroupLayout groupLayout = new GroupLayout(frmStereopara.getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout
 			.createParallelGroup(Alignment.LEADING)
-			.addComponent(opcje, GroupLayout.PREFERRED_SIZE, 400,GroupLayout.PREFERRED_SIZE)
+			.addComponent(opcje, GroupLayout.PREFERRED_SIZE, 600,GroupLayout.PREFERRED_SIZE)
 				.addGroup(groupLayout
 					.createSequentialGroup()
-						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE, 400,GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE, 600,GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE, 400,GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE, 600,GroupLayout.PREFERRED_SIZE)
 								.addContainerGap(28, Short.MAX_VALUE))
 
 		);
@@ -153,8 +153,8 @@ public class Stereowizja {
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout
 						.createParallelGroup(Alignment.LEADING)
-						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE,400,GroupLayout.PREFERRED_SIZE)
-						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE,400,GroupLayout.PREFERRED_SIZE))
+						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE,600,GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE,600,GroupLayout.PREFERRED_SIZE))
 							.addGap(40))
 		);
 		frmStereopara.getContentPane().setLayout(groupLayout);
@@ -228,16 +228,21 @@ public class Stereowizja {
 				}
 				
 				if (!skalibrowany) {
-					if (kalibruj()) {
-	
-						obraz1.wyczyscListeMarkerow();
-						obraz2.wyczyscListeMarkerow();
-						txtX.show(false);
-						txtY.show(false);
-						txtZ.show(false);
-						skalibrowany = true;
-						btnPrzekszta.setText("Oblicz współrzędne");
-						
+					if (obraz1 == null || obraz1.getMarkery().size() < 6) {
+						// za mało markerów!
+						JOptionPane.showMessageDialog(null, "Podano zbyt mało markerów, proszę podać minimum 6");
+					} else {
+						if (kalibruj()) {
+		
+							obraz1.wyczyscListeMarkerow();
+							obraz2.wyczyscListeMarkerow();
+							txtX.show(false);
+							txtY.show(false);
+							txtZ.show(false);
+							skalibrowany = true;
+							btnPrzekszta.setText("Oblicz współrzędne");
+							
+						}
 					}
 				} else {
 					// TODO oddzielić
@@ -379,7 +384,15 @@ public class Stereowizja {
 		xt2 = new Matrix(tempXt2);
 		Matrix result = przetwornik.rekonstruuj(xt1, xt2);
 		
-		pozycja.setText("X:" + result.get(0, 0) + ", Y:"+ result.get(1, 0) + ", Z:" + result.get(2, 0));
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		df.setMinimumFractionDigits(2);
+		Double x,y,z;
+		x = result.get(0, 0);
+		y = result.get(1, 0);
+		z = result.get(2, 0);
+		
+		pozycja.setText("X:" + df.format(x) + ", Y:"+ df.format(y) + ", Z:" + df.format(z));
 		return result;
 	}
 }
