@@ -48,7 +48,7 @@ public class Stereowizja {
 	private JLabel lbMarker;
 	private JPanel opcje;
 	Przetwornik przetwornik = new Przetwornik();
-	boolean skalibrowany = false;
+	private boolean skalibrowany = false;
 	
 	/**
 	 * Launch the application.
@@ -222,31 +222,36 @@ public class Stereowizja {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int nr=obraz1.sprawdzKtoryJestZaznaczony();
-				if (nr!=-1){
-					dodajWspolrzedne3D(nr);
-				}
-				
-				if (!skalibrowany) {
-					if (obraz1 == null || obraz1.getMarkery().size() < 6) {
-						// za mało markerów!
-						JOptionPane.showMessageDialog(null, "Podano zbyt mało markerów, proszę podać minimum 6");
-					} else {
-						if (kalibruj()) {
-		
-							obraz1.wyczyscListeMarkerow();
-							obraz2.wyczyscListeMarkerow();
-							txtX.show(false);
-							txtY.show(false);
-							txtZ.show(false);
-							skalibrowany = true;
-							btnPrzekszta.setText("Oblicz współrzędne");
-							
-						}
+				try {
+					int nr=obraz1.sprawdzKtoryJestZaznaczony();
+					if (nr!=-1 && !skalibrowany){
+						dodajWspolrzedne3D(nr);
 					}
-				} else {
-					// TODO oddzielić
-					obliczWspolrzedne();
+					
+					if (!skalibrowany) {
+						if (obraz1 == null || obraz1.getMarkery().size() < 6) {
+							// za mało markerów!
+							JOptionPane.showMessageDialog(null, "Podano zbyt mało markerów, proszę podać minimum 6");
+						} else {
+							if (kalibruj()) {
+			
+								obraz1.wyczyscListeMarkerow();
+								obraz2.wyczyscListeMarkerow();
+								txtX.show(false);
+								txtY.show(false);
+								txtZ.show(false);
+								skalibrowany = true;
+								btnPrzekszta.setText("Oblicz współrzędne");
+								
+							}
+						}
+					} else {
+						obliczWspolrzedne();
+					}
+				} catch (BadCoordsException e) {
+					
+					JOptionPane.showMessageDialog(null, "Proszę podać poprawne współrzędne rzeczywiste punktu!");
+					
 				}
 			}
 
@@ -261,21 +266,28 @@ public class Stereowizja {
 	}
 	
 	public boolean dodawanieMarkeraDoPanelow(int x, int y, int nr){
-		if (!skalibrowany || skalibrowany && obraz1.getMarkery().size() == 0) {
-			obraz1.dodajMarker(x, y);
-			obraz2.dodajMarker(x, y);
-			if(nr!=-1){
-				dodajWspolrzedne3D(nr);
+		try {
+			if (!skalibrowany || skalibrowany && obraz1.getMarkery().size() == 0) {
+				obraz1.dodajMarker(x, y);
+				obraz2.dodajMarker(x, y);
+				if(nr!=-1){
+					dodajWspolrzedne3D(nr);
+				}
+				if (!skalibrowany) {
+					txtX.grabFocus();
+				}
 			}
-			if (!skalibrowany) {
-				txtX.grabFocus();
-			}
+			wyczyscTxtXYZ();
+		} catch (BadCoordsException e) {
+			obraz1.getMarkery().remove(obraz1.getMarkery().size()-1);
+			obraz2.getMarkery().remove(obraz2.getMarkery().size()-1);
+			JOptionPane.showMessageDialog(null, "Proszę podać poprawne współrzędne rzeczywiste punktu!");
+			return false;
 		}
-		wyczyscTxtXYZ();
 		return true;
 	}
 	
-	public void dodajWspolrzedne3D(int nr){
+	public void dodajWspolrzedne3D(int nr) throws BadCoordsException{
 		int x=-1, y=-1,z=-1;
 		try{
 			x=Integer.parseInt(txtX.getText());
@@ -288,6 +300,8 @@ public class Stereowizja {
 		if(x!=-1 && y!= -1 && z!=-1){
 			obraz1.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );
 			obraz2.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );
+		} else {
+			throw new BadCoordsException();
 		}
 	}
 	
@@ -365,6 +379,10 @@ public class Stereowizja {
 		przetwornik.skalibruj(x1, x2, X);
 		
 		return true;
+	}
+	
+	public boolean getSkalibrowany() {
+		return skalibrowany;
 	}
 	
 	private Matrix obliczWspolrzedne() {

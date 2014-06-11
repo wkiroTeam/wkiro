@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -108,7 +109,8 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		Marker m =new Marker(nrMarkera,x,y);
 		markery.add(m);
 		nrMarkera++;
-		zaznaczony=m; 
+		//zaznaczony=m;
+		stereowizja.oznaczZaznaczonyMarker(m.getNr());
 		repaint();
 	}
 	
@@ -209,22 +211,29 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		//PRZESOWANIE MARKEROW- CHWYTAMY I LATAMY PO OBRAZKU- lewy myszek
 		else if(!markery.isEmpty() && arg0.getButton() ==MouseEvent.BUTTON1){
-			for(Marker m : markery){
-				if(mX>m.getXmin() && //
-						mX<m.getXmax() &&
-						mY>m.getYmin() && 
-						mY<m.getYmax()){
-					m.setX(arg0.getX());
-					m.setY(arg0.getY());
-					przesowany=m;
-					stereowizja.dodajWspolrzedne3D(zaznaczony.getNr());	
-					zaznaczony=m;
-					if(zaznaczony.X3d!=-1){
-						stereowizja.wyswietlWspolrzedne3dMarkera(zaznaczony);
+			try {
+				for(Marker m : markery){
+					if(mX>m.getXmin() && //
+							mX<m.getXmax() &&
+							mY>m.getYmin() && 
+							mY<m.getYmax()){
+						m.setX(arg0.getX());
+						m.setY(arg0.getY());
+						przesowany=m;
+						if (!stereowizja.getSkalibrowany()) {
+							stereowizja.dodajWspolrzedne3D(zaznaczony.getNr());	
+						}
+						//zaznaczony=m;
+						stereowizja.oznaczZaznaczonyMarker(m.getNr());
+						if(zaznaczony.X3d!=-1){
+							stereowizja.wyswietlWspolrzedne3dMarkera(zaznaczony);
+						}
+						break;
 					}
-					break;
-				}
-			}	
+				}	
+			} catch (BadCoordsException e) {
+				JOptionPane.showMessageDialog(null, "Proszę podać poprawne współrzędne rzeczywiste punktu!");
+			}
 		}
 	}
 

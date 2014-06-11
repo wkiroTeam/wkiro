@@ -15,6 +15,13 @@ public class Przetwornik {
 	public void skalibruj(Matrix x1, Matrix x2, Matrix X) {
 		P1 = kalibr(x1, X);
 		P2 = kalibr(x2, X);
+		
+		x1.print(6, 4);
+		x2.print(6, 4);
+		X.print(6, 4);
+
+		P1.print(6, 4);
+		P2.print(6, 4);
 	}
 	
 	/**
@@ -59,8 +66,6 @@ public class Przetwornik {
 		P.setMatrix(0, 0, 0, 3, P1);
 		P.setMatrix(1, 1, 0, 3, P2);
 		P.setMatrix(2, 2, 0, 3, P3);
-		
-		P.print(6, 4);
 		
 		return P;
 	}
