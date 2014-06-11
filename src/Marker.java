@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 public class Marker  {
 	private int nr; //numer markera
 	private int x, y; // pozycja na Jpanelu Obraz
+	public int X3d=-1,Y3d,Z3d;
 	private Color kolor;
 	int rozmiar=5; //rozmiar plusika
 	Color [] kolory={Color.MAGENTA, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW,Color.CYAN, Color.GRAY, Color.ORANGE,Color.PINK};

@@ -26,9 +26,12 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	Stereowizja stereowizja;
 	
 	Marker przesowany=null;
+	Marker zaznaczony=null;// slozy do oznazenia zaznaczonego markera, marker bedzie zaznaczony dopoki nie zaznaczymy innego, lub klikniemy costam
+	// wpisanie wspolrzednych 3d nastepuje dopiero po kliknieciu innego markera;
 	
 	public Obraz(Stereowizja stereowizja){
 		super();
+		//this.setSize(10,10);
 		this.stereowizja=stereowizja;
 		wysokosc=0;
 		szerokosc=0;
@@ -76,8 +79,9 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	public void paint(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		g2d.drawImage(obraz, 0,0,szerokosc,wysokosc, this);
-		
+		if(obraz!=null){
+			g2d.drawImage(obraz, 0,0,szerokosc,wysokosc, this);
+		}
 		this.setSize(szerokosc, wysokosc);
 		if(markery!=null){
 			for(Marker m : markery){
@@ -87,8 +91,13 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	}
 	
 	public void dodajMarker( int x, int y){
-		markery.add(new Marker(nrMarkera,x,y));
+		if(zaznaczony!=null){
+			stereowizja.dodajWspolrzedne3D(zaznaczony.getNr());
+		}
+		Marker m =new Marker(nrMarkera,x,y);
+		markery.add(m);
 		nrMarkera++;
+		zaznaczony=m; 
 		repaint();
 	}
 	
@@ -97,11 +106,23 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		for(Marker m: markery){
 			if(m.getNr()==nr){
 				mark=m;
+				break;
 			}
 		}
 		if( mark!=null)
 			markery.remove(mark);
 		repaint();
+	}
+	
+	public void dodajDoMarkeraWspolrzedne3d(int nr, int x,int y,int z ){
+		for(Marker m:markery){
+			if(m.getNr()==nr){
+				m.X3d=x;
+				m.Y3d=y;
+				m.Z3d=z;
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -171,6 +192,11 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 					m.setX(arg0.getX());
 					m.setY(arg0.getY());
 					przesowany=m;
+					stereowizja.dodajWspolrzedne3D(zaznaczony.getNr());	
+					zaznaczony=m;
+					if(zaznaczony.X3d!=-1){
+						stereowizja.wyswietlWspolrzedne3dMarkera(zaznaczony);
+					}
 					break;
 				}
 			}	

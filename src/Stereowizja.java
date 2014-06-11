@@ -19,6 +19,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import com.sun.javafx.scene.layout.region.Margins.Converter;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 
 
@@ -29,7 +34,11 @@ public class Stereowizja {
 	Obraz obraz1;// panel zawierajacy pierwszy obrazek +markery
 	Obraz obraz2;// panel zawierajacy drogi obrazek + markery
 	private final JButton btnPrzekszta = new JButton("Przekszta\u0142\u0107");
-	JLabel pozycja = new JLabel("");
+	JLabel pozycja= new JLabel("vc");
+	private JTextField txtX;
+	private JTextField txtY;
+	private JTextField txtZ;
+	private JLabel lbMarker;
 	
 	/**
 	 * Launch the application.
@@ -59,12 +68,9 @@ public class Stereowizja {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		obraz1=new Obraz(this);
-		obraz2=new Obraz(this);
+
 		//zeby nie wczytywac cay czas to mozna odblokowac i wpisac sciezke do pliku
-		//File f= new File("D:\\Dokumenty\\gra\\gra1.png");
-		//obraz1.wczytajZpliku(f);
-		//obraz2.wczytajZpliku(f);
+		File f= new File("D:\\Dokumenty\\gra\\gra1.png");
 		//
 		/**
 		 * Ustawianie wygl¹du ¿eby sie w kupie trzymalo, latwo moze sie rozdupcyc
@@ -72,6 +78,29 @@ public class Stereowizja {
 
 		frame.setBounds(100, 100, 410, 227);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
+		txtX = new JTextField();
+		txtX.setText("X");
+		txtX.setColumns(10);
+		
+		txtY = new JTextField();
+		txtY.setText("Y");
+		txtY.setColumns(10);
+		
+		txtZ = new JTextField();
+		txtZ.setText("Z");
+		txtZ.setColumns(10);
+		
+		lbMarker = new JLabel();
+		lbMarker.setSize(10, 10);
+		obraz2=new Obraz(this);
+		obraz2.wczytajZpliku(f);
+		
+		obraz2.setBorder(UIManager.getBorder("PopupMenu.border"));
+		obraz2.setLayout(new BorderLayout(0, 0));
+		obraz1=new Obraz(this);
+		obraz1.wczytajZpliku(f);
 		GroupLayout groupLayout_1 = new GroupLayout(obraz1);
 		groupLayout_1.setHorizontalGroup(
 			groupLayout_1.createParallelGroup(Alignment.LEADING)
@@ -83,39 +112,53 @@ public class Stereowizja {
 		);
 		obraz1.setBorder(UIManager.getBorder("FileChooser.listViewBorder"));
 		obraz1.setLayout(groupLayout_1);
-
-		
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
+							.addGap(300)
+							.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(9)
 							.addComponent(btnPrzekszta)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(pozycja))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(28, Short.MAX_VALUE))
+							.addGap(5)
+							.addComponent(txtX, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtY, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(txtZ, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)
+							.addComponent(pozycja)))
+					.addContainerGap(9, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap()
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(5)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnPrzekszta, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
-						.addComponent(pozycja, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnPrzekszta)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(txtX, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(txtY, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(1)
+							.addComponent(txtZ, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(4)
+							.addComponent(pozycja)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
-						.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE))
-					.addGap(40))
+						.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))
+					.addGap(195))
 		);
-		
-		obraz2.setBorder(UIManager.getBorder("PopupMenu.border"));
 		frame.getContentPane().setLayout(groupLayout);
 		/**
 		 * MENU
@@ -194,8 +237,29 @@ public class Stereowizja {
 		return true;
 	}
 	
+	public void dodajWspolrzedne3D(int nr){
+		int x=-1, y=-1,z=-1;
+		try{
+			x=Integer.parseInt(txtX.getText());
+			y=Integer.parseInt(txtY.getText());
+			z=Integer.parseInt(txtZ.getText());
+		}
+		catch(Exception e){
+			System.out.println("Blad panie Kaziu "+e);
+		}
+		if(x!=-1 && y!= -1 && z!=-1){
+			obraz1.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );
+			obraz2.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );
+		}
+	}
+	
 	public void tekstLabelki(int x, int y){
 		pozycja.setText("X:"+x+", Y:"+y);
+	}
+	public void wyswietlWspolrzedne3dMarkera(Marker m){
+		txtX.setText(String.valueOf(m.X3d));
+		txtY.setText(String.valueOf(m.Y3d));
+		txtZ.setText(String.valueOf(m.Z3d));
 	}
 	
 	
@@ -217,6 +281,4 @@ public class Stereowizja {
 		}
 		return false;
 	}
-	
-	
 }
