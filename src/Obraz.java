@@ -1,4 +1,5 @@
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -74,14 +75,25 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		markery= new ArrayList<Marker>();
 	}
+	/*public void update(Graphics g){
+		Dimension rozmiar= this.getSize();
+		if(obraz!=null){
+			Graphics g2d= obraz.getGraphics();
+			paint(g2d);
+			g2d.dispose();
+			g2d.drawImage(obraz, 0,0,szerokosc,wysokosc, this);
+		}
+	}*/
+	
+	
 
 	// malowanie funkcja wywolywana poptrzez repaint()
 	public void paint(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		if(obraz!=null){
+		//if(obraz!=null){
 			g2d.drawImage(obraz, 0,0,szerokosc,wysokosc, this);
-		}
+		//}
 		this.setSize(szerokosc, wysokosc);
 		if(markery!=null){
 			for(Marker m : markery){
@@ -94,6 +106,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		if(zaznaczony!=null){
 			stereowizja.dodajWspolrzedne3D(zaznaczony.getNr());
 		}
+		stereowizja.wyczyscTxtXYZ();
 		Marker m =new Marker(nrMarkera,x,y);
 		markery.add(m);
 		nrMarkera++;
@@ -123,6 +136,13 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 				break;
 			}
 		}
+	}
+	
+	public int sprawdzKtoryJestZaznaczony(){
+		if(zaznaczony!=null){
+			return zaznaczony.getNr();
+		}
+		return -1;
 	}
 
 	@Override
@@ -219,7 +239,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 			przesowany.setX(arg0.getX());
 			przesowany.setY(arg0.getY());
 			stereowizja.tekstLabelki(arg0.getX(), arg0.getY());
-			repaint();
+			//repaint();
 		}
 	}
 	//KONIEC KODU DO PRZESOWANIA

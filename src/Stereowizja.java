@@ -219,9 +219,15 @@ public class Stereowizja {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				int nr=obraz1.sprawdzKtoryJestZaznaczony();
+				if (nr!=-1){
+					dodajWspolrzedne3D(nr);
+				}
 				// TODO-zrobienia trzeba pobrac wartosci z listMarkerow z Obrazkow zrobic na nich operacje i costam jeszcze
 				
 			}
+
+	
 		});
 	}
 	public boolean usunMarkerZPanelow( int nrMarkera){
@@ -260,6 +266,12 @@ public class Stereowizja {
 		txtX.setText(String.valueOf(m.X3d));
 		txtY.setText(String.valueOf(m.Y3d));
 		txtZ.setText(String.valueOf(m.Z3d));
+	}
+	
+	public void wyczyscTxtXYZ(){
+		txtX.setText("");
+		txtY.setText("");
+		txtZ.setText("");
 	}
 	
 	
