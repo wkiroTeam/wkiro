@@ -95,9 +95,7 @@ public class Stereowizja {
 		//obraz1.wczytajZpliku(f);
 		//obraz2.wczytajZpliku(f);
 		//
-		/**
-		 * Ustawianie wygl�du �eby sie w kupie trzymalo, latwo moze sie rozdupcyc
-		 */
+
 
 		frmStereopara.setBounds(100, 100, 439, 134);
 		frmStereopara.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
