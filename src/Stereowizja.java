@@ -45,6 +45,9 @@ public class Stereowizja {
 	private JTextField txtX;
 	private JTextField txtY;
 	private JTextField txtZ;
+	private JLabel lblX;
+	private JLabel lblY;
+	private JLabel lblZ;
 	private JLabel lbMarker;
 	private JPanel opcje;
 	Przetwornik przetwornik = new Przetwornik();
@@ -96,42 +99,50 @@ public class Stereowizja {
 		 * Ustawianie wygl�du �eby sie w kupie trzymalo, latwo moze sie rozdupcyc
 		 */
 
-		frmStereopara.setBounds(100, 100, 303, 134);
+		frmStereopara.setBounds(100, 100, 439, 134);
 		frmStereopara.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		opcje = new JPanel();
 		opcje.setLayout(null);
 		
-		btnPrzekszta.setBounds(3, 10, 147, 23);
+		btnPrzekszta.setBounds(3, 10, 100, 23);
 		opcje.add(btnPrzekszta);
+		
+		lblX = new JLabel("X:");
+		lblX.setBounds(115, 13, 15, 16);
+		opcje.add(lblX);
 
 		txtX = new JTextField();
-		txtX.setBounds(160, 11, 30, 20);
+		txtX.setBounds(130, 13, 30, 20);
 		opcje.add(txtX);
-		txtX.setText("X");
+		txtX.setText("");
 		txtX.setColumns(10);
 		
+		lblY = new JLabel("Y:");
+		lblY.setBounds(170, 13, 15, 16);
+		opcje.add(lblY);
+		
 		txtY = new JTextField();
-		txtY.setBounds(200, 12, 30, 20);
+		txtY.setBounds(185, 13, 30, 20);
 		opcje.add(txtY);
-		txtY.setText("Y");
+		txtY.setText("");
 		txtY.setColumns(10);
+		
+		lblZ = new JLabel("Z:");
+		lblZ.setBounds(225, 13, 15, 16);
+		opcje.add(lblZ);
 		
 		txtZ = new JTextField();
 		txtZ.setBounds(240, 12, 30, 20);
 		opcje.add(txtZ);
-		txtZ.setText("Z");
+		txtZ.setText("");
 		txtZ.setColumns(10);
 		
 		btnPrzekszta.setText("Kalibruj");
 		skalibrowany = false;
-		txtX.show(true);
-		txtY.show(true);
-		txtZ.show(true);
-
 		
 
-		pozycja.setBounds(280, 12, 600, 20);
+		pozycja.setBounds(292, 12, 200, 20);
 		opcje.add(pozycja);
 		
 		GroupLayout groupLayout = new GroupLayout(frmStereopara.getContentPane());
@@ -207,9 +218,7 @@ public class Stereowizja {
 				pozycja.setText("");
 				btnPrzekszta.setText("Kalibruj");
 				skalibrowany = false;
-				txtX.show(true);
-				txtY.show(true);
-				txtZ.show(true);
+				ukryjPokazXYZlabelki(true);
 			}
 		});
 		
@@ -222,9 +231,7 @@ public class Stereowizja {
 				pozycja.setText("");
 				btnPrzekszta.setText("Kalibruj");
 				skalibrowany = false;
-				txtX.show(true);
-				txtY.show(true);
-				txtZ.show(true);
+				ukryjPokazXYZlabelki(true);
 				
 			}
 		});
@@ -258,9 +265,7 @@ public class Stereowizja {
 				 
 									obraz1.wyczyscListeMarkerow();
 									obraz2.wyczyscListeMarkerow();
-									txtX.show(false);
-									txtY.show(false);
-									txtZ.show(false);
+									ukryjPokazXYZlabelki(false);
 									skalibrowany = true;
 									btnPrzekszta.setText("Szacuj punkt");
 									
@@ -350,6 +355,21 @@ public class Stereowizja {
 		txtX.setText("");
 		txtY.setText("");
 		txtZ.setText("");
+	}
+	
+	private void ukryjPokazXYZlabelki(boolean widoczne){
+		if(widoczne){
+			btnPrzekszta.setBounds(3, 10, 100, 23);
+		}
+		else{
+			btnPrzekszta.setBounds(3, 10, 160, 23);
+		}
+		txtX.setVisible(widoczne);
+		lblX.setVisible(widoczne);
+		txtY.setVisible(widoczne);
+		lblY.setVisible(widoczne);
+		txtZ.setVisible(widoczne);
+		lblZ.setVisible(widoczne);
 	}
 	
 	
