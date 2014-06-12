@@ -57,6 +57,7 @@ public class Stereowizja {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					Stereowizja window = new Stereowizja();
 					window.frmStereopara.setVisible(true);
 				} catch (Exception e) {
@@ -173,6 +174,9 @@ public class Stereowizja {
 		
 		JMenuItem mntmResetuj = new JMenuItem("Resetuj",KeyEvent.VK_R);
 		mnPlik.add(mntmResetuj);
+
+		JMenuItem mntmRekalibruj = new JMenuItem("Skalibruj ponownie", KeyEvent.VK_S);
+		mnPlik.add(mntmRekalibruj);
 		
 		JMenuItem mntmZakocz = new JMenuItem("Zako\u0144cz", KeyEvent.VK_Z);
 		mnPlik.add(mntmZakocz);
@@ -209,6 +213,22 @@ public class Stereowizja {
 			}
 		});
 		
+		mntmRekalibruj.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				obraz1.wyczyscListeMarkerow();
+				obraz2.wyczyscListeMarkerow();
+				pozycja.setText("");
+				btnPrzekszta.setText("Kalibruj");
+				skalibrowany = false;
+				txtX.show(true);
+				txtY.show(true);
+				txtZ.show(true);
+				
+			}
+		});
+		
 		mntmZakocz.addActionListener(new ActionListener() {
 			
 			@Override
@@ -223,30 +243,32 @@ public class Stereowizja {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					int nr=obraz1.sprawdzKtoryJestZaznaczony();
-					if (nr!=-1 && !skalibrowany){
-						dodajWspolrzedne3D(nr);
-					}
-					
-					if (!skalibrowany) {
-						if (obraz1 == null || obraz1.getMarkery().size() < 6) {
-							// za mało markerów!
-							JOptionPane.showMessageDialog(null, "Podano zbyt mało markerów, proszę podać minimum 6");
-						} else {
-							if (kalibruj()) {
-			
-								obraz1.wyczyscListeMarkerow();
-								obraz2.wyczyscListeMarkerow();
-								txtX.show(false);
-								txtY.show(false);
-								txtZ.show(false);
-								skalibrowany = true;
-								btnPrzekszta.setText("Oblicz współrzędne");
-								
-							}
+					if (obraz1.czyZaladowany() && obraz2.czyZaladowany()) {
+						int nr=obraz1.sprawdzKtoryJestZaznaczony();
+						if (nr!=-1 && !skalibrowany){
+							dodajWspolrzedne3D(nr);
 						}
-					} else {
-						obliczWspolrzedne();
+						
+						if (!skalibrowany) {
+							if (obraz1.getMarkery().size() < 6) {
+								// za mało markerów!
+								JOptionPane.showMessageDialog(null, "Podano zbyt mało markerów, proszę podać minimum 6");
+							} else {
+								if (kalibruj()) {
+				
+									obraz1.wyczyscListeMarkerow();
+									obraz2.wyczyscListeMarkerow();
+									txtX.show(false);
+									txtY.show(false);
+									txtZ.show(false);
+									skalibrowany = true;
+									btnPrzekszta.setText("Oblicz współrzędne");
+									
+								}
+							}
+						} else {
+							obliczWspolrzedne();
+						}
 					}
 				} catch (BadCoordsException e) {
 					
@@ -295,7 +317,6 @@ public class Stereowizja {
 			z=Integer.parseInt(txtZ.getText());
 		}
 		catch(Exception e){
-			System.out.println("Blad panie Kaziu "+e);
 		}
 		if(x!=-1 && y!= -1 && z!=-1){
 			obraz1.dodajDoMarkeraWspolrzedne3d(nr, x, y, z );

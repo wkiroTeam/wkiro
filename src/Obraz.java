@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class Obraz extends JPanel implements MouseListener, MouseMotionListener {
 
 
-	private BufferedImage obraz;
+	private BufferedImage obraz = null;
 	private int szerokosc;
 	private int wysokosc;
 	
@@ -63,6 +63,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	public void resetujObraz(){
 		obraz= null;
 		markery=null;
+		zaznaczony=null;
 		nrMarkera=0;
 		zmienRozmiar(0, 0);
 		repaint();	
@@ -129,6 +130,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 	
 	public void wyczyscListeMarkerow() {
 		markery.clear();
+		zaznaczony=null;
 		repaint();
 	}
 	
@@ -269,4 +271,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		return markery;
 	}
 	
+	public boolean czyZaladowany() {
+		return obraz != null?true:false;
+	}
 }
