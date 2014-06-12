@@ -255,7 +255,7 @@ public class Stereowizja {
 								JOptionPane.showMessageDialog(null, "Podano zbyt mało markerów, proszę podać minimum 6");
 							} else {
 								if (kalibruj()) {
-				
+				 
 									obraz1.wyczyscListeMarkerow();
 									obraz2.wyczyscListeMarkerow();
 									txtX.show(false);
