@@ -125,6 +125,7 @@ public class Obraz extends JPanel implements MouseListener, MouseMotionListener 
 		}
 		if( mark!=null)
 			markery.remove(mark);
+		zaznaczony=null;
 		repaint();
 	}
 	

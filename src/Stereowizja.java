@@ -267,7 +267,13 @@ public class Stereowizja {
 								}
 							}
 						} else {
-							obliczWspolrzedne();
+							if (obraz1.getMarkery().size()>0) {
+								obliczWspolrzedne();
+							} else {
+								// brak markerów!
+								JOptionPane.showMessageDialog(null, "Nie podano punktu, proszę zaznaczyć na obu obrazach punkt");
+								
+							}
 						}
 					}
 				} catch (BadCoordsException e) {
