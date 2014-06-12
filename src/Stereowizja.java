@@ -102,23 +102,23 @@ public class Stereowizja {
 		opcje = new JPanel();
 		opcje.setLayout(null);
 		
-		btnPrzekszta.setBounds(3, 10, 87, 23);
+		btnPrzekszta.setBounds(3, 10, 147, 23);
 		opcje.add(btnPrzekszta);
 
 		txtX = new JTextField();
-		txtX.setBounds(100, 11, 30, 20);
+		txtX.setBounds(160, 11, 30, 20);
 		opcje.add(txtX);
 		txtX.setText("X");
 		txtX.setColumns(10);
 		
 		txtY = new JTextField();
-		txtY.setBounds(140, 12, 30, 20);
+		txtY.setBounds(200, 12, 30, 20);
 		opcje.add(txtY);
 		txtY.setText("Y");
 		txtY.setColumns(10);
 		
 		txtZ = new JTextField();
-		txtZ.setBounds(180, 12, 30, 20);
+		txtZ.setBounds(240, 12, 30, 20);
 		opcje.add(txtZ);
 		txtZ.setText("Z");
 		txtZ.setColumns(10);
@@ -131,7 +131,7 @@ public class Stereowizja {
 
 		
 
-		pozycja.setBounds(220, 12, 600, 20);
+		pozycja.setBounds(280, 12, 600, 20);
 		opcje.add(pozycja);
 		
 		GroupLayout groupLayout = new GroupLayout(frmStereopara.getContentPane());
@@ -262,7 +262,7 @@ public class Stereowizja {
 									txtY.show(false);
 									txtZ.show(false);
 									skalibrowany = true;
-									btnPrzekszta.setText("Oblicz współrzędne");
+									btnPrzekszta.setText("Szacuj punkt");
 									
 								}
 							}
