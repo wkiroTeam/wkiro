@@ -221,7 +221,7 @@ public class Stereowizja {
 				btnPrzekszta.setText("Kalibruj");
 				skalibrowany = false;
 				ukryjPokazXYZlabelki(true);
-				btnMacierze.disable();
+				//btnMacierze.disable();
 			}
 		});
 		
@@ -235,7 +235,7 @@ public class Stereowizja {
 				btnPrzekszta.setText("Kalibruj");
 				skalibrowany = false;
 				ukryjPokazXYZlabelki(true);
-				btnMacierze.disable();
+				//btnMacierze.disable();
 			}
 		});
 		
@@ -271,7 +271,7 @@ public class Stereowizja {
 									ukryjPokazXYZlabelki(false);
 									skalibrowany = true;
 									btnPrzekszta.setText("Szacuj punkt");
-									btnMacierze.enable();
+									//btnMacierze.enable();
 								}
 							}
 						} else {
@@ -290,10 +290,9 @@ public class Stereowizja {
 					
 				}
 			}
-
-	
+			
 		});
-		
+		btnMacierze.setVisible(false);
 		btnMacierze.addActionListener(new ActionListener() {
 			
 			@Override
@@ -376,6 +375,7 @@ public class Stereowizja {
 		else{
 			btnPrzekszta.setBounds(3, 10, 150, 23);
 		}
+		btnMacierze.setVisible(!widoczne);
 		txtX.setVisible(widoczne);
 		lblX.setVisible(widoczne);
 		txtY.setVisible(widoczne);
@@ -476,7 +476,9 @@ public class Stereowizja {
 	
 	public void pokazMacierze() {
 		
-		Matrix P1 = przetwornik.getP1();
+		Macierze macierz= new Macierze(przetwornik);
+		
+		/*Matrix P1 = przetwornik.getP1();
 		Matrix P2 = przetwornik.getP2();
 		
 		JFrame frame = new JFrame("Macierze rzutowania");
@@ -539,7 +541,7 @@ public class Stereowizja {
 		frame.getContentPane().add(macierz1, BorderLayout.CENTER);
 		frame.getContentPane().add(macierz2, BorderLayout.CENTER);
 		frame.setSize(400, 300);
-		frame.setVisible(true);
+		frame.setVisible(true);*/
 	}
 
 }
