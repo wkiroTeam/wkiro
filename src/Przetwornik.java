@@ -129,4 +129,14 @@ public class Przetwornik {
 				
 		return XYZ;
 	}
+
+	public Matrix getP1() {
+		return P1;
+	}
+
+	public Matrix getP2() {
+		return P2;
+	}
+	
+	
 }

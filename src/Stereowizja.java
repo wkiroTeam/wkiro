@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -35,12 +37,12 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 public class Stereowizja {
-	 
 	private JFrame frmStereopara;
 	final JFileChooser fc= new JFileChooser();
 	Obraz obraz1;// panel zawierajacy pierwszy obrazek +markery
 	Obraz obraz2;// panel zawierajacy drogi obrazek + markery
 	private final JButton btnPrzekszta = new JButton("Kalibruj");
+	private final JButton btnMacierze = new JButton("Macierze");
 	JLabel pozycja= new JLabel("");
 	private JTextField txtX;
 	private JTextField txtY;
@@ -51,7 +53,7 @@ public class Stereowizja {
 	private JLabel lbMarker;
 	private JPanel opcje;
 	Przetwornik przetwornik = new Przetwornik();
-	private boolean skalibrowany = false;
+	private boolean skalibrowany = false;	
 	
 	/**
 	 * Launch the application.
@@ -91,13 +93,13 @@ public class Stereowizja {
 		
 		//zeby nie wczytywac cay czas to mozna odblokowac i wpisac sciezke do pliku
 
-		//File f= new File("D:\\Dokumenty\\gra\\gra1.png");
-		//obraz1.wczytajZpliku(f);
-		//obraz2.wczytajZpliku(f);
+//		File f= new File("/home/michal/Pulpit/1.png");
+//		obraz1.wczytajZpliku(f);
+//		obraz2.wczytajZpliku(f);
 		//
 
 
-		frmStereopara.setBounds(100, 100, 439, 134);
+		frmStereopara.setBounds(100, 100, 357, 377);
 		frmStereopara.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		opcje = new JPanel();
@@ -106,32 +108,35 @@ public class Stereowizja {
 		btnPrzekszta.setBounds(3, 10, 100, 23);
 		opcje.add(btnPrzekszta);
 		
+		btnMacierze.setBounds(3, 40, 100, 23);
+		opcje.add(btnMacierze);
+		
 		lblX = new JLabel("X:");
-		lblX.setBounds(115, 13, 15, 16);
+		lblX.setBounds(13, 74, 15, 16);
 		opcje.add(lblX);
-
+		
 		txtX = new JTextField();
-		txtX.setBounds(130, 13, 30, 20);
+		txtX.setBounds(28, 74, 30, 20);
 		opcje.add(txtX);
 		txtX.setText("");
 		txtX.setColumns(10);
 		
 		lblY = new JLabel("Y:");
-		lblY.setBounds(170, 13, 15, 16);
+		lblY.setBounds(13, 101, 15, 16);
 		opcje.add(lblY);
 		
 		txtY = new JTextField();
-		txtY.setBounds(185, 13, 30, 20);
+		txtY.setBounds(28, 101, 30, 20);
 		opcje.add(txtY);
 		txtY.setText("");
 		txtY.setColumns(10);
 		
 		lblZ = new JLabel("Z:");
-		lblZ.setBounds(225, 13, 15, 16);
+		lblZ.setBounds(13, 129, 15, 16);
 		opcje.add(lblZ);
 		
 		txtZ = new JTextField();
-		txtZ.setBounds(240, 12, 30, 20);
+		txtZ.setBounds(28, 128, 30, 20);
 		opcje.add(txtZ);
 		txtZ.setText("");
 		txtZ.setColumns(10);
@@ -140,33 +145,32 @@ public class Stereowizja {
 		skalibrowany = false;
 		
 
-		pozycja.setBounds(292, 12, 200, 20);
+		pozycja.setBounds(10, 159, 93, 53);
 		opcje.add(pozycja);
-		
-		GroupLayout groupLayout = new GroupLayout(frmStereopara.getContentPane());
-		groupLayout.setHorizontalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
-			.addComponent(opcje, GroupLayout.PREFERRED_SIZE, 600,GroupLayout.PREFERRED_SIZE)
-				.addGroup(groupLayout
-					.createSequentialGroup()
-						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE, 600,GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE, 600,GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(28, Short.MAX_VALUE))
 
+		GroupLayout groupLayout = new GroupLayout(frmStereopara.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(opcje, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+							.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
+							.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
-		groupLayout.setVerticalGroup(groupLayout
-			.createParallelGroup(Alignment.LEADING)
-			.addGroup(groupLayout
-				.createSequentialGroup()
-					.addComponent(opcje,GroupLayout.PREFERRED_SIZE, 38,GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(groupLayout
-						.createParallelGroup(Alignment.LEADING)
-						.addComponent(obraz1,GroupLayout.PREFERRED_SIZE,600,GroupLayout.PREFERRED_SIZE)
-						.addComponent(obraz2,GroupLayout.PREFERRED_SIZE,600,GroupLayout.PREFERRED_SIZE))
-							.addGap(40))
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(opcje, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz1, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE)
+						.addComponent(obraz2, GroupLayout.PREFERRED_SIZE, 600, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		
+		
+		
+		
 		frmStereopara.getContentPane().setLayout(groupLayout);
 		/**
 		 * MENU
@@ -217,6 +221,7 @@ public class Stereowizja {
 				btnPrzekszta.setText("Kalibruj");
 				skalibrowany = false;
 				ukryjPokazXYZlabelki(true);
+				btnMacierze.disable();
 			}
 		});
 		
@@ -230,7 +235,7 @@ public class Stereowizja {
 				btnPrzekszta.setText("Kalibruj");
 				skalibrowany = false;
 				ukryjPokazXYZlabelki(true);
-				
+				btnMacierze.disable();
 			}
 		});
 		
@@ -266,7 +271,7 @@ public class Stereowizja {
 									ukryjPokazXYZlabelki(false);
 									skalibrowany = true;
 									btnPrzekszta.setText("Szacuj punkt");
-									
+									btnMacierze.enable();
 								}
 							}
 						} else {
@@ -287,6 +292,15 @@ public class Stereowizja {
 			}
 
 	
+		});
+		
+		btnMacierze.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pokazMacierze();
+				
+			}
 		});
 	}
 	public boolean usunMarkerZPanelow( int nrMarkera){
@@ -357,10 +371,10 @@ public class Stereowizja {
 	
 	private void ukryjPokazXYZlabelki(boolean widoczne){
 		if(widoczne){
-			btnPrzekszta.setBounds(3, 10, 100, 23);
+			btnPrzekszta.setBounds(3, 10, 100, 23);			
 		}
 		else{
-			btnPrzekszta.setBounds(3, 10, 160, 23);
+			btnPrzekszta.setBounds(3, 10, 150, 23);
 		}
 		txtX.setVisible(widoczne);
 		lblX.setVisible(widoczne);
@@ -368,6 +382,7 @@ public class Stereowizja {
 		lblY.setVisible(widoczne);
 		txtZ.setVisible(widoczne);
 		lblZ.setVisible(widoczne);
+
 	}
 	
 	
@@ -455,7 +470,76 @@ public class Stereowizja {
 		y = result.get(1, 0);
 		z = result.get(2, 0);
 		
-		pozycja.setText("X:" + df.format(x) + ", Y:"+ df.format(y) + ", Z:" + df.format(z));
+		pozycja.setText("<html>X:" + df.format(x) + "<br>Y:"+ df.format(y) + "<br>Z:" + df.format(z)+"</html>");;
 		return result;
 	}
+	
+	public void pokazMacierze() {
+		
+		Matrix P1 = przetwornik.getP1();
+		Matrix P2 = przetwornik.getP2();
+		
+		JFrame frame = new JFrame("Macierze rzutowania");
+		JLabel lblP1 = new JLabel("P1:");
+		JLabel lblP2 = new JLabel("P2:");
+		lblP1.setBounds(5, 5, 50, 50);
+		lblP2.setBounds(5, 155, 50, 50);
+		frame.setResizable(false);
+		
+		DecimalFormat df = new java.text.DecimalFormat();
+		df.setMaximumFractionDigits(4);
+		df.setMinimumFractionDigits(4);
+
+		
+		Object rowData[][] = { 	{ df.format(new Double(P1.get(0, 0))).toString(), df.format(new Double(P1.get(0, 1))).toString(), df.format(new Double(P1.get(0, 2))).toString(), df.format(new Double(P1.get(0, 3))).toString()},
+								{ df.format(new Double(P1.get(1, 0))).toString(), df.format(new Double(P1.get(1, 1))).toString(), df.format(new Double(P1.get(1, 2))).toString(), df.format(new Double(P1.get(1, 3))).toString()},
+								{ df.format(new Double(P1.get(2, 0))).toString(), df.format(new Double(P1.get(2, 1))).toString(), df.format(new Double(P1.get(2, 2))).toString(), df.format(new Double(P1.get(2, 3))).toString()},
+							};
+
+		Object rowData2[][] = { { df.format(new Double(P2.get(0, 0))).toString(), df.format(new Double(P2.get(0, 1))).toString(), df.format(new Double(P2.get(0, 2))).toString(), df.format(new Double(P2.get(0, 3))).toString()},
+								{ df.format(new Double(P2.get(1, 0))).toString(), df.format(new Double(P2.get(1, 1))).toString(), df.format(new Double(P2.get(1, 2))).toString(), df.format(new Double(P2.get(1, 3))).toString()},
+								{ df.format(new Double(P2.get(2, 0))).toString(), df.format(new Double(P2.get(2, 1))).toString(), df.format(new Double(P2.get(2, 2))).toString(), df.format(new Double(P2.get(2, 3))).toString()},
+							};
+
+		Object columnNames[] = { "", "", "", ""};
+
+		JTable macierz1 = new JTable(rowData, columnNames);
+		JTable macierz2 = new JTable(rowData2, columnNames);
+
+		macierz1.setCellSelectionEnabled(false);
+		macierz2.setCellSelectionEnabled(false);
+		
+		
+		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(macierz1, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE)
+							.addComponent(macierz2, GroupLayout.PREFERRED_SIZE, 400, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(macierz1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+						.addComponent(macierz2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		
+		frame.setLayout(groupLayout);
+		
+		macierz1.setBounds(0, 50, 400, 100);
+		macierz2.setBounds(0, 150, 400, 100);
+
+		
+		frame.getContentPane().add(lblP1, BorderLayout.CENTER);
+		frame.getContentPane().add(lblP2, BorderLayout.CENTER);
+		frame.getContentPane().add(macierz1, BorderLayout.CENTER);
+		frame.getContentPane().add(macierz2, BorderLayout.CENTER);
+		frame.setSize(400, 300);
+		frame.setVisible(true);
+	}
+
 }
